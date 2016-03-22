@@ -1,0 +1,68 @@
+package com.zly.www.bzmh.activity;
+
+import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
+
+import com.zly.www.bzmh.R;
+import com.zly.www.bzmh.base.BaseActivity;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class MainActivity extends BaseActivity {
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.drawerlayout)
+    DrawerLayout drawerlayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        init();
+    }
+
+    private void init() {
+        toolbar.setTitle("暴走日报");
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                MainActivity.this,
+                drawerlayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        );
+        actionBarDrawerToggle.syncState();
+        drawerlayout.setDrawerListener(actionBarDrawerToggle);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_msg://消息
+                break;
+            case R.id.item_refresh://刷新
+                break;
+            case R.id.item_setting://设置
+                break;
+        }
+        return true;
+    }
+
+
+}
