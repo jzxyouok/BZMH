@@ -6,6 +6,7 @@
         android:id="@+id/item_msg"
         android:title="消息"
         app:showAsAction="always"
+        android:icon="@mipmap/btn_toolbar_home_msg"
         />
 
     <item

@@ -1,15 +1,18 @@
 package com.zly.www.bzmh.activity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.zly.www.bzmh.R;
 import com.zly.www.bzmh.base.BaseActivity;
+import com.zly.www.bzmh.utils.ToastUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -65,4 +68,17 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private long clickTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if (SystemClock.uptimeMillis() - clickTime > 1500) {
+                clickTime = SystemClock.uptimeMillis();
+                ToastUtil.showShort("再次点击退出");
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
