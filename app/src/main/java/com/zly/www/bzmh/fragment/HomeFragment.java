@@ -2,6 +2,9 @@ package com.zly.www.bzmh.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +20,10 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return LayoutInflater.from(getActivity()).inflate(R.layout.fragment_home,container,false);
     }
+
+
+
+
 
 
 }

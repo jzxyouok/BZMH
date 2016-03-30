@@ -3,6 +3,7 @@ package com.zly.www.bzmh.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zly.www.bzmh.utils.MLog;
 
 /**
@@ -17,8 +18,7 @@ public class AppApplication extends Application{
     public void onCreate() {
         super.onCreate();
         this.context = this;
-
-        MLog.isDebug = true;//打印log
+        Fresco.initialize(context);//Fresco初始化
     }
 
     public static Context getContext(){
