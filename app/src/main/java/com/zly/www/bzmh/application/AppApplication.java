@@ -18,7 +18,7 @@ public class AppApplication extends Application{
     public void onCreate() {
         super.onCreate();
         this.context = this;
-        Fresco.initialize(context);//Fresco初始化
+        Fresco.initialize(this);//Fresco初始化
     }
 
     public static Context getContext(){

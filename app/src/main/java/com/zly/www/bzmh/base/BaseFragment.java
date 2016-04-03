@@ -2,6 +2,9 @@ package com.zly.www.bzmh.base;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.zly.www.bzmh.utils.NetUtils;
 import com.zly.www.bzmh.utils.ToastUtil;
@@ -19,6 +22,14 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * 设置toolbar title
+     * @param title
+     */
+    public void setToolbarTitle(String title){
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        supportActionBar.setTitle(title);
+    }
 
     /**
      * 加载失败

@@ -1,21 +1,20 @@
 package com.zly.www.bzmh.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zly.www.bzmh.R;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 仿navigationview实现
+ * 抽屉adapter
  * Created by zly on 2016/3/30.
  */
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerViewHolder> {
@@ -26,30 +25,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     private List<DrawerItem> dataList = Arrays.asList(
             new DrawerItemHeader(),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_home, "首页"),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_rank, "排行榜"),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_column, "栏目"),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_search, "搜索"),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_setting, "设置"),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_home, R.string.drawer_menu_home),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_rank, R.string.drawer_menu_rank),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_column, R.string.drawer_menu_column),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_search, R.string.drawer_menu_search),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_setting, R.string.drawer_menu_setting),
             new DrawerItemDivider(),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_night, "夜间模式"),
-            new DrawerItemNormal(R.mipmap.icon_drawerlayout_offline, "离线")
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_night, R.string.drawer_menu_night),
+            new DrawerItemNormal(R.mipmap.icon_drawerlayout_offline, R.string.drawer_menu_offline)
     );
-    private LayoutInflater inflater;
-    private LinearLayout headerView;
-
-    public DrawerAdapter(Context context,ViewGroup parentView) {
-        inflater = LayoutInflater.from(context);
-        headerView = (LinearLayout) inflater.inflate(R.layout.item_drawer_header_container, parentView, false);
-    }
-
-    public void inflaterHeader(int res){
-        headerView.addView(inflater.inflate(res,headerView,false));
-    }
-
-    public View getHeaderView(int position){
-        return headerView.getChildAt(position);
-    }
 
 
     @Override
@@ -73,12 +57,13 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     @Override
     public DrawerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         DrawerViewHolder viewHolder = null;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case TYPE_DIVIDER:
                 viewHolder = new DividerViewHolder(inflater.inflate(R.layout.item_drawer_divider, parent, false));
                 break;
             case TYPE_HEADER:
-                viewHolder = new HeaderViewHolder(headerView);
+                viewHolder = new HeaderViewHolder(inflater.inflate(R.layout.item_drawer_header, parent, false));
                 break;
             case TYPE_NORMAL:
                 viewHolder = new NormalViewHolder(inflater.inflate(R.layout.item_drawer_normal, parent, false));
@@ -89,24 +74,26 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     @Override
     public void onBindViewHolder(DrawerViewHolder holder, int position) {
-        DrawerItem item = dataList.get(position);
+        final DrawerItem item = dataList.get(position);
         if (holder instanceof NormalViewHolder) {
-            final NormalViewHolder normalViewHolder = (NormalViewHolder) holder;
-            DrawerItemNormal itemNormal = (DrawerItemNormal) item;
+            NormalViewHolder normalViewHolder = (NormalViewHolder) holder;
+            final DrawerItemNormal itemNormal = (DrawerItemNormal) item;
             normalViewHolder.iv.setBackgroundResource(itemNormal.iconRes);
-            normalViewHolder.tv.setText(itemNormal.title);
+            normalViewHolder.tv.setText(itemNormal.titleRes);
 
             normalViewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
-                        listener.itemClick(normalViewHolder.view);
+                        listener.itemClick(itemNormal);
+
                     }
                 }
             });
-
-
+        }else if(holder instanceof HeaderViewHolder){
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
         }
+
     }
 
     public OnItemClickListener listener;
@@ -116,7 +103,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     }
 
     public interface OnItemClickListener{
-        void itemClick(View v);
+        void itemClick(DrawerItemNormal drawerItemNormal);
     }
 
 
@@ -124,30 +111,30 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     //-------------------------item数据模型------------------------------
     // drawerlayout item统一的数据模型
-    private interface DrawerItem {
+    public interface DrawerItem {
     }
 
 
     //有图片和文字的item
-    class DrawerItemNormal implements DrawerItem {
+    public class DrawerItemNormal implements DrawerItem {
         public int iconRes;
-        public String title;
+        public int titleRes;
 
-        public DrawerItemNormal(int iconRes, String title) {
+        public DrawerItemNormal(int iconRes, int titleRes) {
             this.iconRes = iconRes;
-            this.title = title;
+            this.titleRes = titleRes;
         }
 
     }
 
     //分割线item
-    class DrawerItemDivider implements DrawerItem {
+    public class DrawerItemDivider implements DrawerItem {
         public DrawerItemDivider() {
         }
     }
 
     //头部item
-    class DrawerItemHeader implements DrawerItem{
+    public class DrawerItemHeader implements DrawerItem{
         public DrawerItemHeader() {
         }
     }
@@ -156,7 +143,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     //----------------------------------ViewHolder数据模型---------------------------
     //抽屉ViewHolder模型
-    class DrawerViewHolder extends RecyclerView.ViewHolder {
+    public class DrawerViewHolder extends RecyclerView.ViewHolder {
 
         public DrawerViewHolder(View itemView) {
             super(itemView);
@@ -164,7 +151,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     }
 
     //有图标有文字ViewHolder
-    class NormalViewHolder extends DrawerViewHolder {
+    public class NormalViewHolder extends DrawerViewHolder {
         public View view;
         public TextView tv;
         public ImageView iv;
@@ -178,7 +165,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     }
 
     //分割线ViewHolder
-    class DividerViewHolder extends DrawerViewHolder {
+    public class DividerViewHolder extends DrawerViewHolder {
 
         public DividerViewHolder(View itemView) {
             super(itemView);
@@ -186,10 +173,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     }
 
     //头部ViewHolder
-    class HeaderViewHolder extends DrawerViewHolder {
+    public class HeaderViewHolder extends DrawerViewHolder {
+
+        private SimpleDraweeView sdv_icon;
+        private TextView tv_login;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
+            sdv_icon = (SimpleDraweeView) itemView.findViewById(R.id.sdv_icon);
+            tv_login = (TextView) itemView.findViewById(R.id.tv_login);
         }
     }
 }

@@ -18,11 +18,11 @@
     </LinearLayout>
 
 
-    <FrameLayout
-        android:id="@+id/fl_drawer"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_drawer"
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        />
+        android:background="@color/white" />
 
 </android.support.v4.widget.DrawerLayout>
